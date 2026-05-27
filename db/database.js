@@ -32,6 +32,16 @@ db.execute(`
   )
 `);
 
+db.execute(`
+  CREATE TABLE IF NOT EXISTS sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_token TEXT NOT NULL UNIQUE,
+    user_id INTEGER NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`);
+
 // Insert sample programmes only if table is empty.
 const programmeCount = [...db.query("SELECT COUNT(*) FROM programmes")][0][0];
 
