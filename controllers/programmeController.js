@@ -1,14 +1,29 @@
 // controllers/programmeController.js
 // This controller handles programme-related requests.
-// It asks the model for data, then passes that data to the view.
+// It gets data from models and sends it to views.
 
-import { getPublishedProgrammes } from "../models/programmeModel.js";
+import {
+  getPublishedProgrammes,
+  getProgrammeById,
+  getModulesByProgrammeId,
+} from "../models/programmeModel.js";
+
 import { programmesView } from "../views/programmesView.js";
+import { programmeDetailView } from "../views/programmeDetailView.js";
 
 export function showProgrammes() {
-  // Get programme data from SQLite through the model.
   const programmes = getPublishedProgrammes();
-
-  // Send programme data to the view to generate HTML.
   return programmesView(programmes);
+}
+
+export function showProgrammeDetails(programmeId) {
+  const programme = getProgrammeById(programmeId);
+
+  if (!programme) {
+    return "<h1>Programme not found</h1>";
+  }
+
+  const modules = getModulesByProgrammeId(programmeId);
+
+  return programmeDetailView(programme, modules);
 }

@@ -8,8 +8,7 @@ import { DB } from "https://deno.land/x/sqlite/mod.ts";
 // If the file does not exist, SQLite will create it automatically.
 export const db = new DB("student_course_hub.db");
 
-// Create the programmes table.
-// This stores the course/programme information shown to students.
+// Create programmes table.
 db.execute(`
   CREATE TABLE IF NOT EXISTS programmes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,37 +19,50 @@ db.execute(`
   )
 `);
 
-// Insert sample programme data only if the table is empty.
+// Create modules table.
+// Each module belongs to one programme using programme_id.
+db.execute(`
+  CREATE TABLE IF NOT EXISTS modules (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    programme_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    year INTEGER NOT NULL,
+    leader TEXT NOT NULL,
+    FOREIGN KEY (programme_id) REFERENCES programmes(id)
+  )
+`);
+
+// Insert sample programmes only if table is empty.
 const programmeCount = [...db.query("SELECT COUNT(*) FROM programmes")][0][0];
 
 if (programmeCount === 0) {
   db.query(
     "INSERT INTO programmes (title, level, description, published) VALUES (?, ?, ?, ?)",
-    [
-      "Computer Science BSc",
-      "Undergraduate",
-      "Learn programming, databases, web development, and software engineering.",
-      1,
-    ],
+    ["Computer Science BSc", "Undergraduate", "Learn programming, databases, web development, and software engineering.", 1],
   );
 
   db.query(
     "INSERT INTO programmes (title, level, description, published) VALUES (?, ?, ?, ?)",
-    [
-      "Cyber Security MSc",
-      "Postgraduate",
-      "Study ethical hacking, network security, digital forensics, and secure systems.",
-      1,
-    ],
+    ["Cyber Security MSc", "Postgraduate", "Study ethical hacking, network security, digital forensics, and secure systems.", 1],
   );
 
   db.query(
     "INSERT INTO programmes (title, level, description, published) VALUES (?, ?, ?, ?)",
-    [
-      "Software Engineering BSc",
-      "Undergraduate",
-      "Build reliable software systems using modern development methods.",
-      1,
-    ],
+    ["Software Engineering BSc", "Undergraduate", "Build reliable software systems using modern development methods.", 1],
   );
+}
+
+// Insert sample modules only if modules table is empty.
+const moduleCount = [...db.query("SELECT COUNT(*) FROM modules")][0][0];
+
+if (moduleCount === 0) {
+  db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [1, "Web Development", 1, "Dr Smith"]);
+  db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [1, "Database Systems", 2, "Dr Patel"]);
+  db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [1, "Final Year Project", 3, "Dr Brown"]);
+
+  db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [2, "Network Security", 1, "Dr Khan"]);
+  db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [2, "Digital Forensics", 2, "Dr Wilson"]);
+
+  db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [3, "Software Design", 1, "Dr Green"]);
+  db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [3, "Agile Development", 2, "Dr Taylor"]);
 }

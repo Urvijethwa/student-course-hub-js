@@ -64,3 +64,15 @@ main {
   font-weight: bold;
   color: #0b6bcb;
 }
+
+/* Styling for programme module list */
+.module-list {
+  padding-left: 1.2rem;
+}
+
+.module-item {
+  margin-bottom: 1rem;
+  background: #f5f7fb;
+  padding: 1rem;
+  border-radius: 8px;
+}
