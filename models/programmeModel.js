@@ -98,3 +98,29 @@ export function getAllProgrammes() {
     };
   });
 }
+
+export function updateProgramme(
+  id,
+  title,
+  level,
+  description,
+) {
+
+  db.query(
+    `
+    UPDATE programmes
+    SET
+      title = ?,
+      level = ?,
+      description = ?
+    WHERE id = ?
+    `,
+    [
+      title,
+      level,
+      description,
+      id,
+    ],
+  );
+
+}

@@ -4,6 +4,8 @@ import {
   showAddProgrammePage,
   createProgrammeFromRequest,
   showAdminProgrammes,
+  showEditProgrammePage,
+  updateProgrammeFromRequest,
 } from "./controllers/adminController.js";
 
 import { requireAdmin } from "./middleware/authMiddleware.js";
@@ -157,6 +159,52 @@ if (url.pathname === "/admin/programmes") {
   return htmlResponse(showAdminProgrammes());
 }
 
+// Route: Show edit programme form
+if (
+  url.pathname.startsWith("/admin/programmes/")
+  && url.pathname.endsWith("/edit")
+) {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  const id = Number(
+    url.pathname.split("/")[3],
+  );
+
+  return htmlResponse(
+    showEditProgrammePage(id),
+  );
+
+}
+
+
+// Route: Update programme
+if (
+  url.pathname.startsWith("/admin/programmes/")
+  && url.pathname.endsWith("/update")
+  && request.method === "POST"
+) {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  const id = Number(
+    url.pathname.split("/")[3],
+  );
+
+  return await updateProgrammeFromRequest(
+    request,
+    id,
+  );
+
+}
   // Route: 404 page
   return htmlResponse("<h1>404 - Page Not Found</h1>", 404);
 }
