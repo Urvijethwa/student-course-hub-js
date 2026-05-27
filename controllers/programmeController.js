@@ -1,30 +1,14 @@
 // controllers/programmeController.js
 // This controller handles programme-related requests.
-// For now, data is hardcoded. Later, we will replace this with SQLite database data.
+// It asks the model for data, then passes that data to the view.
 
+import { getPublishedProgrammes } from "../models/programmeModel.js";
 import { programmesView } from "../views/programmesView.js";
 
-const programmes = [
-  {
-    id: 1,
-    title: "Computer Science BSc",
-    level: "Undergraduate",
-    description: "Learn programming, databases, web development, and software engineering.",
-  },
-  {
-    id: 2,
-    title: "Cyber Security MSc",
-    level: "Postgraduate",
-    description: "Study ethical hacking, network security, digital forensics, and secure systems.",
-  },
-  {
-    id: 3,
-    title: "Software Engineering BSc",
-    level: "Undergraduate",
-    description: "Build reliable software systems using modern development methods.",
-  },
-];
-
 export function showProgrammes() {
+  // Get programme data from SQLite through the model.
+  const programmes = getPublishedProgrammes();
+
+  // Send programme data to the view to generate HTML.
   return programmesView(programmes);
 }
