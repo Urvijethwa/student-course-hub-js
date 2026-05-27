@@ -124,3 +124,15 @@ export function updateProgramme(
   );
 
 }
+
+export function deleteProgramme(id) {
+
+  db.query(
+    `
+    DELETE FROM programmes
+    WHERE id = ?
+    `,
+    [id],
+  );
+
+}

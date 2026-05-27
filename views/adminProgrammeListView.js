@@ -11,6 +11,7 @@ export function adminProgrammeListView(programmes) {
 
     return `
       <tr>
+
         <td>${programme.id}</td>
 
         <td>${programme.title}</td>
@@ -20,13 +21,32 @@ export function adminProgrammeListView(programmes) {
         <td>${status}</td>
 
         <td>
+
           <a
             class="button small-button"
             href="/admin/programmes/${programme.id}/edit"
           >
             Edit
           </a>
+
+          <form
+            method="POST"
+            action="/admin/programmes/${programme.id}/delete"
+            style="display:inline;"
+          >
+
+            <button
+              class="button small-button danger-button"
+              type="submit"
+              onclick="return confirm('Are you sure you want to delete this programme?')"
+            >
+              Delete
+            </button>
+
+          </form>
+
         </td>
+
       </tr>
     `;
 

@@ -6,6 +6,7 @@ import {
   showAdminProgrammes,
   showEditProgrammePage,
   updateProgrammeFromRequest,
+  deleteProgrammeFromRequest,
 } from "./controllers/adminController.js";
 
 import { requireAdmin } from "./middleware/authMiddleware.js";
@@ -205,6 +206,28 @@ if (
   );
 
 }
+
+// Route: Delete programme
+if (
+  url.pathname.startsWith("/admin/programmes/")
+  && url.pathname.endsWith("/delete")
+  && request.method === "POST"
+) {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  const id = Number(
+    url.pathname.split("/")[3],
+  );
+
+  return deleteProgrammeFromRequest(id);
+
+}
+
   // Route: 404 page
   return htmlResponse("<h1>404 - Page Not Found</h1>", 404);
 }
