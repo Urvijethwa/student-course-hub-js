@@ -45,3 +45,22 @@ main {
   background: #084f96;
   outline: 3px solid #ffbf47;
 }
+
+/* Grid layout for programme cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.programme-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tag {
+  display: inline-block;
+  font-weight: bold;
+  color: #0b6bcb;
+}

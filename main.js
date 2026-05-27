@@ -2,6 +2,7 @@
 // Main entry point for the Student Course Hub application.
 // This file receives HTTP requests and routes them to the correct response.
 
+import { showProgrammes } from "./controllers/programmeController.js";
 import { homeView } from "./views/homeView.js";
 
 // Port number used for the local Deno server.
@@ -42,6 +43,11 @@ function handler(request) {
   if (url.pathname === "/css/style.css") {
     return cssResponse();
   }
+
+  // Route: Programmes page
+if (url.pathname === "/programmes") {
+  return htmlResponse(showProgrammes());
+}
 
   // Route: 404 page
   return htmlResponse("<h1>404 - Page Not Found</h1>", 404);
