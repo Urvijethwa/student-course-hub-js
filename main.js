@@ -1,6 +1,8 @@
-// main.js
 // Main entry point for the Student Course Hub application.
 // This file receives HTTP requests and routes them to the correct response.
+
+import { requireAdmin } from "./middleware/authMiddleware.js";
+import { adminDashboardView } from "./views/adminView.js";
 
 import {
   showInterestForm,
@@ -91,6 +93,17 @@ if (url.pathname === "/login" && request.method === "GET") {
 // Route: Process login form
 if (url.pathname === "/login" && request.method === "POST") {
   return await loginUser(request);
+}
+
+// Route: Protected admin dashboard
+if (url.pathname === "/admin") {
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  return htmlResponse(adminDashboardView());
 }
 
   // Route: 404 page
