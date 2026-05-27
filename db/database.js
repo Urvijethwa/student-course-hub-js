@@ -67,15 +67,27 @@ if (moduleCount === 0) {
   db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [3, "Agile Development", 2, "Dr Taylor"]);
 }
 
-// Create interests table.
-// This stores prospective students who register interest in a programme.
+// Create users table.
+// This stores admin login accounts.
 db.execute(`
-  CREATE TABLE IF NOT EXISTS interests (
+  CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    student_name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    programme_id INTEGER NOT NULL,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (programme_id) REFERENCES programmes(id)
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    role TEXT NOT NULL
   )
 `);
+
+// Insert default admin user only if no users exist.
+const userCount = [...db.query("SELECT COUNT(*) FROM users")][0][0];
+
+if (userCount === 0) {
+  db.query(
+    "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
+    [
+      "admin",
+      "password123",
+      "admin",
+    ],
+  );
+}

@@ -1,6 +1,5 @@
 // views/layoutView.js
-// This file contains the main HTML layout used by all pages.
-// It prevents repeating the same HTML structure in every view.
+// This file contains the shared HTML layout for all pages.
 
 export function layoutView(title, content) {
   return `
@@ -9,23 +8,27 @@ export function layoutView(title, content) {
     <head>
       <meta charset="UTF-8">
 
-      <!-- Makes the website responsive on mobile devices -->
+      <!-- Responsive mobile layout -->
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
       <title>${title} | Student Course Hub</title>
 
-      <!-- Links the main CSS file -->
+      <!-- Main stylesheet -->
       <link rel="stylesheet" href="/css/style.css">
     </head>
+
     <body>
       <header class="site-header">
         <h1>Student Course Hub</h1>
-        <p>Find university programmes and register your interest.</p>
+
+        <p>
+          Find university programmes and register your interest.
+        </p>
 
         <nav aria-label="Main navigation">
           <a href="/">Home</a>
           <a href="/programmes">Programmes</a>
-          <a href="/admin">Admin</a>
+          <a href="/login">Admin Login</a>
         </nav>
       </header>
 

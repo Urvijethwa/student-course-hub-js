@@ -8,6 +8,11 @@ import {
 } from "./controllers/interestController.js";
 
 import {
+  showLoginPage,
+  loginUser,
+} from "./controllers/authController.js";
+
+import {
   showProgrammes,
   showProgrammeDetails,
 } from "./controllers/programmeController.js";
@@ -77,6 +82,16 @@ async function handler(request) {
   if (url.pathname === "/interests/create" && request.method === "POST") {
     return htmlResponse(await createInterestFromRequest(request));
   }
+
+  // Route: Show login page
+if (url.pathname === "/login" && request.method === "GET") {
+  return htmlResponse(showLoginPage());
+}
+
+// Route: Process login form
+if (url.pathname === "/login" && request.method === "POST") {
+  return htmlResponse(await loginUser(request));
+}
 
   // Route: 404 page
   return htmlResponse("<h1>404 - Page Not Found</h1>", 404);
