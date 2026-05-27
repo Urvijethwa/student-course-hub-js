@@ -9,6 +9,10 @@ export function adminDashboardView() {
         You are logged in and authorised to access admin features.
       </p>
 
+      <a class="button" href="/admin/programmes/new">
+      Add New Programme
+      </a>
+
       <ul>
         <li>Manage programmes</li>
         <li>Manage modules</li>

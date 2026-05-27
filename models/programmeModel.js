@@ -53,3 +53,25 @@ export function getModulesByProgrammeId(programmeId) {
     leader: row[3],
   }));
 }
+
+export function createProgramme(title, level, description) {
+
+  db.query(
+    `
+    INSERT INTO programmes (
+      title,
+      level,
+      description,
+      published
+    )
+    VALUES (?, ?, ?, ?)
+    `,
+    [
+      title,
+      level,
+      description,
+      1,
+    ],
+  );
+
+}

@@ -1,5 +1,9 @@
 // Main entry point for the Student Course Hub application.
 // This file receives HTTP requests and routes them to the correct response.
+import {
+  showAddProgrammePage,
+  createProgrammeFromRequest,
+} from "./controllers/adminController.js";
 
 import { requireAdmin } from "./middleware/authMiddleware.js";
 import { adminDashboardView } from "./views/adminView.js";
@@ -109,6 +113,36 @@ if (url.pathname === "/admin") {
 
 if (url.pathname === "/logout") {
   return logoutUser();
+}
+
+// Route: Show add programme form
+if (url.pathname === "/admin/programmes/new") {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  return htmlResponse(showAddProgrammePage());
+
+}
+
+
+// Route: Create new programme
+if (
+  url.pathname === "/admin/programmes/create"
+  && request.method === "POST"
+) {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  return await createProgrammeFromRequest(request);
+
 }
 
   // Route: 404 page
