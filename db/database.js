@@ -66,3 +66,16 @@ if (moduleCount === 0) {
   db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [3, "Software Design", 1, "Dr Green"]);
   db.query("INSERT INTO modules (programme_id, title, year, leader) VALUES (?, ?, ?, ?)", [3, "Agile Development", 2, "Dr Taylor"]);
 }
+
+// Create interests table.
+// This stores prospective students who register interest in a programme.
+db.execute(`
+  CREATE TABLE IF NOT EXISTS interests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    programme_id INTEGER NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (programme_id) REFERENCES programmes(id)
+  )
+`);

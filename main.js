@@ -2,7 +2,16 @@
 // Main entry point for the Student Course Hub application.
 // This file receives HTTP requests and routes them to the correct response.
 
-import { showProgrammes, showProgrammeDetails } from "./controllers/programmeController.js";
+import {
+  showInterestForm,
+  createInterestFromRequest,
+} from "./controllers/interestController.js";
+
+import {
+  showProgrammes,
+  showProgrammeDetails,
+} from "./controllers/programmeController.js";
+
 import { homeView } from "./views/homeView.js";
 
 // Port number used for the local Deno server.
@@ -30,8 +39,8 @@ function cssResponse() {
 }
 
 // Main HTTP request handler.
-// Every browser request enters the application here.
-function handler(request) {
+// It is async because POST form handling uses await request.formData().
+async function handler(request) {
   const url = new URL(request.url);
 
   // Route: Home page
@@ -45,22 +54,35 @@ function handler(request) {
   }
 
   // Route: Programmes page
-if (url.pathname === "/programmes") {
-  return htmlResponse(showProgrammes());
-}
+  if (url.pathname === "/programmes") {
+    return htmlResponse(showProgrammes());
+  }
 
-// Route: Programme details page
-// Example: /programmes/1
-if (url.pathname.startsWith("/programmes/")) {
-  const programmeId = Number(url.pathname.split("/")[2]);
-  return htmlResponse(showProgrammeDetails(programmeId));
-}
+  // Route: Programme details page
+  // Example: /programmes/1
+  if (url.pathname.startsWith("/programmes/")) {
+    const programmeId = Number(url.pathname.split("/")[2]);
+    return htmlResponse(showProgrammeDetails(programmeId));
+  }
+
+  // Route: Show register interest form
+  // Example: /interests/new?programmeId=1
+  if (url.pathname === "/interests/new") {
+    const programmeId = Number(url.searchParams.get("programmeId"));
+    return htmlResponse(showInterestForm(programmeId));
+  }
+
+  // Route: Save student interest registration
+  // This route only works when the form uses method="POST".
+  if (url.pathname === "/interests/create" && request.method === "POST") {
+    return htmlResponse(await createInterestFromRequest(request));
+  }
 
   // Route: 404 page
   return htmlResponse("<h1>404 - Page Not Found</h1>", 404);
 }
 
-// Start the server.
+// Start the Deno server.
 Deno.serve({ port: PORT }, handler);
 
 console.log(`Server running at http://localhost:${PORT}`);
