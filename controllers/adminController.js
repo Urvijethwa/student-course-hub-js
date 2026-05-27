@@ -1,4 +1,9 @@
-import { createProgramme } from "../models/programmeModel.js";
+import { adminProgrammeListView } from "../views/adminProgrammeListView.js";
+
+import {
+  createProgramme,
+  getAllProgrammes,
+} from "../models/programmeModel.js";
 
 import { addProgrammeView } from "../views/addProgrammeView.js";
 
@@ -30,4 +35,10 @@ export async function createProgrammeFromRequest(request) {
     },
   });
 
+}
+
+export function showAdminProgrammes() {
+  const programmes = getAllProgrammes();
+
+  return adminProgrammeListView(programmes);
 }

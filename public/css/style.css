@@ -101,3 +101,32 @@ input:focus {
   padding: 0.75rem;
   border-radius: 8px;
 }
+
+/* Admin table styling */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+th {
+  background: #102a43;
+  color: white;
+}
+
+.small-button {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+}

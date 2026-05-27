@@ -3,6 +3,7 @@
 import {
   showAddProgrammePage,
   createProgrammeFromRequest,
+  showAdminProgrammes,
 } from "./controllers/adminController.js";
 
 import { requireAdmin } from "./middleware/authMiddleware.js";
@@ -143,6 +144,17 @@ if (
 
   return await createProgrammeFromRequest(request);
 
+}
+
+// Route: Admin programme management page
+if (url.pathname === "/admin/programmes") {
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  return htmlResponse(showAdminProgrammes());
 }
 
   // Route: 404 page

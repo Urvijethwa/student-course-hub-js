@@ -75,3 +75,26 @@ export function createProgramme(title, level, description) {
   );
 
 }
+
+export function getAllProgrammes() {
+  const rows = db.query(`
+    SELECT
+      id,
+      title,
+      level,
+      description,
+      published
+    FROM programmes
+    ORDER BY id DESC
+  `);
+
+  return [...rows].map((row) => {
+    return {
+      id: row[0],
+      title: row[1],
+      level: row[2],
+      description: row[3],
+      published: row[4],
+    };
+  });
+}

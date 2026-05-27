@@ -13,6 +13,10 @@ export function adminDashboardView() {
       Add New Programme
       </a>
 
+      <a class="button" href="/admin/programmes">
+      Manage Programmes
+      </a>
+
       <ul>
         <li>Manage programmes</li>
         <li>Manage modules</li>
