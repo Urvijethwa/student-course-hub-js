@@ -90,7 +90,7 @@ if (url.pathname === "/login" && request.method === "GET") {
 
 // Route: Process login form
 if (url.pathname === "/login" && request.method === "POST") {
-  return htmlResponse(await loginUser(request));
+  return await loginUser(request);
 }
 
   // Route: 404 page
