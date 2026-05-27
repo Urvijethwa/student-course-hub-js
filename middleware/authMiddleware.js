@@ -54,3 +54,13 @@ export function requireAdmin(request) {
     session,
   };
 }
+
+export function logoutUser() {
+  return new Response(null, {
+    status: 302,
+    headers: {
+      "Location": "/login",
+      "Set-Cookie": "session=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax",
+    },
+  });
+}

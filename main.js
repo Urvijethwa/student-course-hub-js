@@ -12,6 +12,7 @@ import {
 import {
   showLoginPage,
   loginUser,
+  logoutUser,
 } from "./controllers/authController.js";
 
 import {
@@ -104,6 +105,10 @@ if (url.pathname === "/admin") {
   }
 
   return htmlResponse(adminDashboardView());
+}
+
+if (url.pathname === "/logout") {
+  return logoutUser();
 }
 
   // Route: 404 page
