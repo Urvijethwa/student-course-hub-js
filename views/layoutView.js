@@ -5,6 +5,7 @@ export function layoutView(title, content) {
   return `
     <!DOCTYPE html>
     <html lang="en">
+
     <head>
       <meta charset="UTF-8">
 
@@ -18,6 +19,10 @@ export function layoutView(title, content) {
     </head>
 
     <body>
+      <a class="skip-link" href="#main-content">
+        Skip to content
+      </a>
+
       <header class="site-header">
         <h1>Student Course Hub</h1>
 
@@ -32,10 +37,11 @@ export function layoutView(title, content) {
         </nav>
       </header>
 
-      <main>
+      <main id="main-content">
         ${content}
       </main>
     </body>
+
     </html>
   `;
 }

@@ -93,7 +93,7 @@ export function programmesView(
 
 <div
   class="grid"
-  id="programme-results"
+  aria-live="polite"
 >
   ${programmeCards}
 </div>
