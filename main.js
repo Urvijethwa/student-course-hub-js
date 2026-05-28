@@ -1,5 +1,6 @@
 // Main entry point for the Student Course Hub application.
 // This file receives HTTP requests and routes them to the correct response.
+
 import {
   showAddProgrammePage,
   createProgrammeFromRequest,
@@ -33,7 +34,6 @@ import {
 } from "./controllers/authController.js";
 
 import {
-  showProgrammes,
   showProgrammeDetails,
   searchProgrammesPage,
   getProgrammesJson,
@@ -41,10 +41,8 @@ import {
 
 import { homeView } from "./views/homeView.js";
 
-// Port number used for the local Deno server.
 const PORT = 8000;
 
-// Helper function to return HTML responses.
 function htmlResponse(html, status = 200) {
   return new Response(html, {
     status,
@@ -54,7 +52,6 @@ function htmlResponse(html, status = 200) {
   });
 }
 
-// Helper function to serve the CSS file.
 function cssResponse() {
   const css = Deno.readTextFileSync("./public/css/style.css");
 
@@ -65,312 +62,249 @@ function cssResponse() {
   });
 }
 
-// Main HTTP request handler.
-// It is async because POST form handling uses await request.formData().
 async function handler(request) {
   const url = new URL(request.url);
 
-  // Route: Home page
   if (url.pathname === "/") {
     return htmlResponse(homeView());
   }
 
-  // Route: CSS file
   if (url.pathname === "/css/style.css") {
     return cssResponse();
   }
 
-  // Route: JavaScript file
-  if (url.pathname === "/js/programmeSearch.js") {
-
-    const js =
-      Deno.readTextFileSync(
-        "./public/js/programmeSearch.js",
-      );
-
-    return new Response(js, {
-      headers: {
-        "content-type": "application/javascript",
-      },
-    });
-
-  }
-
-  // Route: Programmes page
   if (url.pathname === "/programmes") {
-  return htmlResponse(searchProgrammesPage(url));
+    return htmlResponse(searchProgrammesPage(url));
   }
 
-  // Route: Programme details page
-  // Example: /programmes/1
   if (url.pathname.startsWith("/programmes/")) {
     const programmeId = Number(url.pathname.split("/")[2]);
-    return htmlResponse(showProgrammeDetails(programmeId));
+
+    return htmlResponse(
+      showProgrammeDetails(programmeId),
+    );
   }
 
-  // Route: Show register interest form
-  // Example: /interests/new?programmeId=1
   if (url.pathname === "/interests/new") {
-    const programmeId = Number(url.searchParams.get("programmeId"));
-    return htmlResponse(showInterestForm(programmeId));
+    const programmeId = Number(
+      url.searchParams.get("programmeId"),
+    );
+
+    return htmlResponse(
+      showInterestForm(programmeId),
+    );
   }
 
-  // Route: Save student interest registration
-  // This route only works when the form uses method="POST".
-  if (url.pathname === "/interests/create" && request.method === "POST") {
-    return htmlResponse(await createInterestFromRequest(request));
+  if (
+    url.pathname === "/interests/create"
+    && request.method === "POST"
+  ) {
+    return await createInterestFromRequest(request);
   }
 
-  // Route: Show login page
-if (url.pathname === "/login" && request.method === "GET") {
-  return htmlResponse(showLoginPage());
-}
+  if (
+    url.pathname.startsWith("/interests/")
+    && url.pathname.endsWith("/withdraw")
+    && request.method === "POST"
+  ) {
+    const interestId = Number(
+      url.pathname.split("/")[2],
+    );
 
-// Route: Process login form
-if (url.pathname === "/login" && request.method === "POST") {
-  return await loginUser(request);
-}
-
-// Route: Protected admin dashboard
-if (url.pathname === "/admin") {
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return withdrawInterest(interestId);
   }
 
-  return htmlResponse(adminDashboardView());
-}
-
-if (url.pathname === "/logout") {
-  return logoutUser();
-}
-
-// Route: Show add programme form
-if (url.pathname === "/admin/programmes/new") {
-
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+  if (
+    url.pathname === "/login"
+    && request.method === "GET"
+  ) {
+    return htmlResponse(showLoginPage());
   }
 
-  return htmlResponse(showAddProgrammePage());
-
-}
-
-
-// Route: Create new programme
-if (
-  url.pathname === "/admin/programmes/create"
-  && request.method === "POST"
-) {
-
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+  if (
+    url.pathname === "/login"
+    && request.method === "POST"
+  ) {
+    return await loginUser(request);
   }
 
-  return await createProgrammeFromRequest(request);
-
-}
-
-// Route: Admin programme management page
-if (url.pathname === "/admin/programmes") {
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+  if (url.pathname === "/logout") {
+    return logoutUser();
   }
 
-  return htmlResponse(showAdminProgrammes());
-}
+  if (url.pathname === "/admin") {
+    const auth = requireAdmin(request);
 
-// Route: Show edit programme form
-if (
-  url.pathname.startsWith("/admin/programmes/")
-  && url.pathname.endsWith("/edit")
-) {
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return htmlResponse(adminDashboardView());
   }
 
-  const id = Number(
-    url.pathname.split("/")[3],
-  );
+  if (url.pathname === "/admin/programmes/new") {
+    const auth = requireAdmin(request);
 
-  return htmlResponse(
-    showEditProgrammePage(id),
-  );
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-}
-
-
-// Route: Update programme
-if (
-  url.pathname.startsWith("/admin/programmes/")
-  && url.pathname.endsWith("/update")
-  && request.method === "POST"
-) {
-
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return htmlResponse(showAddProgrammePage());
   }
 
-  const id = Number(
-    url.pathname.split("/")[3],
-  );
+  if (
+    url.pathname === "/admin/programmes/create"
+    && request.method === "POST"
+  ) {
+    const auth = requireAdmin(request);
 
-  return await updateProgrammeFromRequest(
-    request,
-    id,
-  );
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-}
-
-// Route: Delete programme
-if (
-  url.pathname.startsWith("/admin/programmes/")
-  && url.pathname.endsWith("/delete")
-  && request.method === "POST"
-) {
-
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return await createProgrammeFromRequest(request);
   }
 
-  const id = Number(
-    url.pathname.split("/")[3],
-  );
+  if (url.pathname === "/admin/programmes") {
+    const auth = requireAdmin(request);
 
-  return deleteProgrammeFromRequest(id);
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-}
-
-// Route: Publish/unpublish programme
-if (
-  url.pathname.startsWith("/admin/programmes/")
-  && url.pathname.endsWith("/toggle-publish")
-  && request.method === "POST"
-) {
-
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return htmlResponse(showAdminProgrammes());
   }
 
-  const id = Number(
-    url.pathname.split("/")[3],
-  );
+  if (
+    url.pathname.startsWith("/admin/programmes/")
+    && url.pathname.endsWith("/edit")
+  ) {
+    const auth = requireAdmin(request);
 
-  return toggleProgrammePublish(id);
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-}
+    const id = Number(url.pathname.split("/")[3]);
 
-// Route: Show add module form
-if (
-  url.pathname.startsWith("/admin/programmes/")
-  && url.pathname.endsWith("/modules/new")
-) {
-
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return htmlResponse(showEditProgrammePage(id));
   }
 
-  const programmeId = Number(
-    url.pathname.split("/")[3],
-  );
+  if (
+    url.pathname.startsWith("/admin/programmes/")
+    && url.pathname.endsWith("/update")
+    && request.method === "POST"
+  ) {
+    const auth = requireAdmin(request);
 
-  return htmlResponse(
-    showAddModulePage(programmeId),
-  );
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-}
+    const id = Number(url.pathname.split("/")[3]);
 
-
-// Route: Create module
-if (
-  url.pathname.startsWith("/admin/programmes/")
-  && url.pathname.endsWith("/modules/create")
-  && request.method === "POST"
-) {
-
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return await updateProgrammeFromRequest(request, id);
   }
 
-  const programmeId = Number(
-    url.pathname.split("/")[3],
-  );
+  if (
+    url.pathname.startsWith("/admin/programmes/")
+    && url.pathname.endsWith("/delete")
+    && request.method === "POST"
+  ) {
+    const auth = requireAdmin(request);
 
-  return await createModuleFromRequest(
-    request,
-    programmeId,
-  );
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-}
+    const id = Number(url.pathname.split("/")[3]);
 
-if (url.pathname === "/admin/interests") {
-  const auth = requireAdmin(request);
-
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return deleteProgrammeFromRequest(id);
   }
 
-  return htmlResponse(showMailingList());
-}
+  if (
+    url.pathname.startsWith("/admin/programmes/")
+    && url.pathname.endsWith("/toggle-publish")
+    && request.method === "POST"
+  ) {
+    const auth = requireAdmin(request);
 
-// Route: Export mailing list CSV
-if (url.pathname === "/admin/interests/export") {
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-  const auth = requireAdmin(request);
+    const id = Number(url.pathname.split("/")[3]);
 
-  if (!auth.authorised) {
-    return auth.redirectResponse;
+    return toggleProgrammePublish(id);
   }
 
-  return exportMailingListCsv();
+  if (
+    url.pathname.startsWith("/admin/programmes/")
+    && url.pathname.endsWith("/modules/new")
+  ) {
+    const auth = requireAdmin(request);
 
-}
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-// Route: JSON API for Fetch API live search
-if (url.pathname === "/api/programmes") {
-  return getProgrammesJson(url);
-}
+    const programmeId = Number(
+      url.pathname.split("/")[3],
+    );
 
-// Route: Withdraw student interest
-if (
-  url.pathname.startsWith("/interests/")
-  && url.pathname.endsWith("/withdraw")
-  && request.method === "POST"
-) {
+    return htmlResponse(
+      showAddModulePage(programmeId),
+    );
+  }
 
-  const interestId = Number(
-    url.pathname.split("/")[2],
-  );
+  if (
+    url.pathname.startsWith("/admin/programmes/")
+    && url.pathname.endsWith("/modules/create")
+    && request.method === "POST"
+  ) {
+    const auth = requireAdmin(request);
 
-  return withdrawInterest(interestId);
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
 
-}
+    const programmeId = Number(
+      url.pathname.split("/")[3],
+    );
 
-  // Route: 404 page
+    return await createModuleFromRequest(
+      request,
+      programmeId,
+    );
+  }
+
+  if (url.pathname === "/admin/interests") {
+    const auth = requireAdmin(request);
+
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
+
+    return htmlResponse(showMailingList());
+  }
+
+  if (url.pathname === "/admin/interests/export") {
+    const auth = requireAdmin(request);
+
+    if (!auth.authorised) {
+      return auth.redirectResponse;
+    }
+
+    return exportMailingListCsv();
+  }
+
+  if (url.pathname === "/api/programmes") {
+    return getProgrammesJson(url);
+  }
+
   return htmlResponse("<h1>404 - Page Not Found</h1>", 404);
 }
 
-// Start the Deno server.
 Deno.serve({ port: PORT }, handler);
 
 console.log(`Server running at http://localhost:${PORT}`);
