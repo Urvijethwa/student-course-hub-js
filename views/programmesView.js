@@ -82,9 +82,24 @@ export function programmesView(
 
       ${noResultsMessage}
 
-      <div class="grid">
-        ${programmeCards}
-      </div>
+      <label for="live-search">
+  Live Search
+</label>
+
+<input
+  type="text"
+  id="live-search"
+  placeholder="Type to search programmes..."
+>
+
+<div
+  class="grid"
+  id="programme-results"
+>
+  ${programmeCards}
+</div>
+
+<script src="/js/programmeSearch.js"></script>
     </section>
   `;
 

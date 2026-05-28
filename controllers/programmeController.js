@@ -37,3 +37,25 @@ export function searchProgrammesPage(url) {
 
   return programmesView(programmes, searchTerm, level);
 }
+
+export function getProgrammesJson(url) {
+
+  const searchTerm =
+    url.searchParams.get("search")?.trim() || "";
+
+  const programmes =
+    searchPublishedProgrammes(
+      searchTerm,
+      "",
+    );
+
+  return new Response(
+    JSON.stringify(programmes),
+    {
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+  );
+
+}

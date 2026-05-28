@@ -35,6 +35,7 @@ import {
   showProgrammes,
   showProgrammeDetails,
   searchProgrammesPage,
+  getProgrammesJson,
 } from "./controllers/programmeController.js";
 
 import { homeView } from "./views/homeView.js";
@@ -76,6 +77,22 @@ async function handler(request) {
   // Route: CSS file
   if (url.pathname === "/css/style.css") {
     return cssResponse();
+  }
+
+  // Route: JavaScript file
+  if (url.pathname === "/js/programmeSearch.js") {
+
+    const js =
+      Deno.readTextFileSync(
+        "./public/js/programmeSearch.js",
+      );
+
+    return new Response(js, {
+      headers: {
+        "content-type": "application/javascript",
+      },
+    });
+
   }
 
   // Route: Programmes page
@@ -326,6 +343,11 @@ if (url.pathname === "/admin/interests/export") {
 
   return exportMailingListCsv();
 
+}
+
+// Route: JSON API for Fetch API live search
+if (url.pathname === "/api/programmes") {
+  return getProgrammesJson(url);
 }
 
   // Route: 404 page
