@@ -10,10 +10,12 @@ export function programmesView(
     return `
       <article class="card programme-card">
         <h3>${escapeHtml(programme.title)}</h3>
+
         <p class="tag">${escapeHtml(programme.level)}</p>
+
         <p>${escapeHtml(programme.description)}</p>
 
-        <a class="button" href="/programmes/${programme.id}">
+        <a class="button card-button" href="/programmes/${programme.id}">
           View Details
         </a>
       </article>
@@ -35,45 +37,49 @@ export function programmesView(
 
       <form method="GET" action="/programmes" class="search-form">
 
-        <label for="search">
-          Search programmes
-        </label>
+        <div class="form-group">
+          <label for="search">
+            Search programmes
+          </label>
 
-        <input
-          type="text"
-          id="search"
-          name="search"
-          value="${escapeHtml(searchTerm)}"
-          placeholder="Search by keyword"
-        >
-
-        <label for="level">
-          Filter by level
-        </label>
-
-        <select id="level" name="level">
-
-          <option value="">
-            All Levels
-          </option>
-
-          <option
-            value="Undergraduate"
-            ${selectedLevel === "Undergraduate" ? "selected" : ""}
+          <input
+            type="text"
+            id="search"
+            name="search"
+            value="${escapeHtml(searchTerm)}"
+            placeholder="Search by keyword"
           >
-            Undergraduate
-          </option>
+        </div>
 
-          <option
-            value="Postgraduate"
-            ${selectedLevel === "Postgraduate" ? "selected" : ""}
-          >
-            Postgraduate
-          </option>
+        <div class="form-group">
+          <label for="level">
+            Filter by level
+          </label>
 
-        </select>
+          <select id="level" name="level">
 
-        <button class="button" type="submit">
+            <option value="">
+              All Levels
+            </option>
+
+            <option
+              value="Undergraduate"
+              ${selectedLevel === "Undergraduate" ? "selected" : ""}
+            >
+              Undergraduate
+            </option>
+
+            <option
+              value="Postgraduate"
+              ${selectedLevel === "Postgraduate" ? "selected" : ""}
+            >
+              Postgraduate
+            </option>
+
+          </select>
+        </div>
+
+        <button class="button search-button" type="submit">
           Search
         </button>
 
@@ -81,24 +87,27 @@ export function programmesView(
 
       ${noResultsMessage}
 
-      <label for="live-search">
-  Live Search
-</label>
+      <section class="live-search-section">
+        <label for="live-search">
+          Live Search
+        </label>
 
-<input
-  type="text"
-  id="live-search"
-  placeholder="Type to search programmes..."
->
+        <input
+          type="text"
+          id="live-search"
+          placeholder="Type to search programmes..."
+        >
+      </section>
 
-<div
-  class="grid"
-  aria-live="polite"
->
-  ${programmeCards}
-</div>
+      <div
+        class="grid"
+        id="programme-results"
+        aria-live="polite"
+      >
+        ${programmeCards}
+      </div>
 
-<script src="/js/programmeSearch.js"></script>
+      <script src="/js/programmeSearch.js"></script>
     </section>
   `;
 

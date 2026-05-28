@@ -1,51 +1,72 @@
-// views/programmeDetailView.js
-// This view displays one programme and its related modules.
-
 import { layoutView } from "./layoutView.js";
 import { escapeHtml } from "../utils/escapeHtml.js";
 
 export function programmeDetailView(programme, modules) {
+
   const moduleList = modules.map((module) => {
     return `
       <li class="module-item">
-      <strong>Year ${escapeHtml(module.year)}:</strong> ${escapeHtml(module.title)}
-      <span>Module leader: ${escapeHtml(module.leader)}</span>
+
+        <strong>
+          Year ${escapeHtml(module.year)}:
+        </strong>
+
+        ${escapeHtml(module.title)}
+
+        <p class="module-leader">
+          Module Leader:
+          ${escapeHtml(module.leader)}
+        </p>
+
       </li>
     `;
   }).join("");
 
   const content = `
-    <section class="card">
-      <a href="/programmes">← Back to programmes</a>
+    <section class="card programme-detail-card">
 
-      <h2>${escapeHtml(programme.title)}</h2>
-      <p class="tag">${escapeHtml(programme.level)}</p>
-      <p>${escapeHtml(programme.description)}</p>
+      <a
+        class="back-link"
+        href="/programmes"
+      >
+        ← Back to programmes
+      </a>
+
+      <h2>
+        ${escapeHtml(programme.title)}
+      </h2>
+
+      <p class="tag">
+        ${escapeHtml(programme.level)}
+      </p>
+
+      <p class="programme-description">
+        ${escapeHtml(programme.description)}
+      </p>
 
       <h3>Modules</h3>
+
       <ul class="module-list">
         ${moduleList}
       </ul>
 
-      <a class="button" href="/interests/new?programmeId=${programme.id}">
-        Register Interest
-      </a>
+      <div class="button-group">
 
-      <form
-      method="POST"
-      action="/interests/${programme.id}/withdraw"
-    >
+        <a
+          class="button action-button"
+          href="/interests/new?programmeId=${programme.id}"
+        >
+          Register Interest
+        </a>
 
-      <button
-        class="button danger-button"
-        type="submit"
-      >
-        Withdraw Interest
-      </button>
+      </div>
 
-    </form>
     </section>
   `;
 
-  return layoutView(programme.title, content);
+  return layoutView(
+    programme.title,
+    content,
+  );
+
 }
