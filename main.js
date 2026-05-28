@@ -9,6 +9,7 @@ import {
   deleteProgrammeFromRequest,
   toggleProgrammePublish,
   showMailingList,
+  exportMailingListCsv,
 } from "./controllers/adminController.js";
 
 import {
@@ -33,6 +34,7 @@ import {
 import {
   showProgrammes,
   showProgrammeDetails,
+  searchProgrammesPage,
 } from "./controllers/programmeController.js";
 
 import { homeView } from "./views/homeView.js";
@@ -78,7 +80,7 @@ async function handler(request) {
 
   // Route: Programmes page
   if (url.pathname === "/programmes") {
-    return htmlResponse(showProgrammes());
+  return htmlResponse(searchProgrammesPage(url));
   }
 
   // Route: Programme details page
@@ -311,6 +313,19 @@ if (url.pathname === "/admin/interests") {
   }
 
   return htmlResponse(showMailingList());
+}
+
+// Route: Export mailing list CSV
+if (url.pathname === "/admin/interests/export") {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  return exportMailingListCsv();
+
 }
 
   // Route: 404 page

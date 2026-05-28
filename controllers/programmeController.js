@@ -6,6 +6,7 @@ import {
   getPublishedProgrammes,
   getProgrammeById,
   getModulesByProgrammeId,
+  searchPublishedProgrammes,
 } from "../models/programmeModel.js";
 
 import { programmesView } from "../views/programmesView.js";
@@ -26,4 +27,13 @@ export function showProgrammeDetails(programmeId) {
   const modules = getModulesByProgrammeId(programmeId);
 
   return programmeDetailView(programme, modules);
+}
+
+export function searchProgrammesPage(url) {
+  const searchTerm = url.searchParams.get("search")?.trim() || "";
+  const level = url.searchParams.get("level")?.trim() || "";
+
+  const programmes = searchPublishedProgrammes(searchTerm, level);
+
+  return programmesView(programmes, searchTerm, level);
 }

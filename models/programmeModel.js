@@ -167,3 +167,48 @@ export function toggleProgrammePublishStatus(id) {
   );
 
 }
+
+export function searchPublishedProgrammes(searchTerm, level) {
+  let sql = `
+    SELECT id, title, level, description
+    FROM programmes
+    WHERE published = ?
+  `;
+
+  const params = [1];
+
+  if (searchTerm) {
+    sql += `
+      AND (
+        title LIKE ?
+        OR description LIKE ?
+      )
+    `;
+
+    params.push(`%${searchTerm}%`);
+    params.push(`%${searchTerm}%`);
+  }
+
+  if (level) {
+    sql += `
+      AND level = ?
+    `;
+
+    params.push(level);
+  }
+
+  sql += `
+    ORDER BY title ASC
+  `;
+
+  const rows = db.query(sql, params);
+
+  return [...rows].map((row) => {
+    return {
+      id: row[0],
+      title: row[1],
+      level: row[2],
+      description: row[3],
+    };
+  });
+}

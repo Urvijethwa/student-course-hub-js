@@ -134,3 +134,31 @@ export function showMailingList() {
 
   return mailingListView(interests);
 }
+
+export function exportMailingListCsv() {
+
+  const interests = getAllInterestsWithProgrammes();
+
+  let csv =
+    "Student Name,Email,Programme,Date Registered\n";
+
+  for (const interest of interests) {
+
+    csv +=
+      `"${interest.studentName}",` +
+      `"${interest.email}",` +
+      `"${interest.programmeTitle}",` +
+      `"${interest.createdAt}"\n`;
+
+  }
+
+  return new Response(csv, {
+    status: 200,
+    headers: {
+      "content-type": "text/csv",
+      "content-disposition":
+        "attachment; filename=mailing-list.csv",
+    },
+  });
+
+}
