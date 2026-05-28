@@ -10,3 +10,30 @@ export function createInterest(studentName, email, programmeId) {
     [studentName, email, programmeId],
   );
 }
+
+export function getAllInterestsWithProgrammes() {
+  const rows = db.query(
+    `
+    SELECT
+      interests.id,
+      interests.student_name,
+      interests.email,
+      interests.created_at,
+      programmes.title
+    FROM interests
+    JOIN programmes
+      ON interests.programme_id = programmes.id
+    ORDER BY interests.created_at DESC
+    `,
+  );
+
+  return [...rows].map((row) => {
+    return {
+      id: row[0],
+      studentName: row[1],
+      email: row[2],
+      createdAt: row[3],
+      programmeTitle: row[4],
+    };
+  });
+}

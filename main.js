@@ -8,6 +8,7 @@ import {
   updateProgrammeFromRequest,
   deleteProgrammeFromRequest,
   toggleProgrammePublish,
+  showMailingList,
 } from "./controllers/adminController.js";
 
 import {
@@ -300,6 +301,16 @@ if (
     programmeId,
   );
 
+}
+
+if (url.pathname === "/admin/interests") {
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  return htmlResponse(showMailingList());
 }
 
   // Route: 404 page

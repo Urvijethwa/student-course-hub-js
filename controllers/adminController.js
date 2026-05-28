@@ -1,5 +1,7 @@
 import { adminProgrammeListView } from "../views/adminProgrammeListView.js";
 import { editProgrammeView } from "../views/editProgrammeView.js";
+import { getAllInterestsWithProgrammes } from "../models/interestModel.js";
+import { mailingListView } from "../views/mailingListView.js";
 
 import {
   createProgramme,
@@ -125,4 +127,10 @@ export function toggleProgrammePublish(id) {
     },
   });
 
+}
+
+export function showMailingList() {
+  const interests = getAllInterestsWithProgrammes();
+
+  return mailingListView(interests);
 }
