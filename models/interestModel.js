@@ -6,9 +6,25 @@ import { db } from "../db/database.js";
 export function createInterest(studentName, email, programmeId) {
   // Parameterised query prevents SQL injection.
   db.query(
-    "INSERT INTO interests (student_name, email, programme_id) VALUES (?, ?, ?)",
-    [studentName, email, programmeId],
+    `
+    INSERT INTO interests (
+      student_name,
+      email,
+      programme_id
+    )
+    VALUES (?, ?, ?)
+    `,
+    [
+      studentName,
+      email,
+      programmeId,
+    ],
   );
+
+  // Return the ID of the new interest record.
+  const row = [...db.query("SELECT last_insert_rowid()")][0];
+
+  return row[0];
 }
 
 export function getAllInterestsWithProgrammes() {
@@ -39,7 +55,6 @@ export function getAllInterestsWithProgrammes() {
 }
 
 export function deleteInterest(id) {
-
   db.query(
     `
     DELETE FROM interests
@@ -47,6 +62,4 @@ export function deleteInterest(id) {
     `,
     [id],
   );
-
 }
-

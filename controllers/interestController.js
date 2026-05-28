@@ -64,12 +64,21 @@ export async function createInterestFromRequest(request) {
   const validationError = validateInterest(studentName, email);
 
   if (validationError) {
-    return htmlResponse(interestFormView(programme, validationError), 400);
+    return htmlResponse(
+      interestFormView(programme, validationError),
+      400,
+    );
   }
 
-  createInterest(studentName, email, programmeId);
+  const interestId = createInterest(
+    studentName,
+    email,
+    programmeId,
+  );
 
-  return htmlResponse(interestSuccessView());
+  return htmlResponse(
+    interestSuccessView(interestId),
+  );
 }
 
 export function withdrawInterest(id) {

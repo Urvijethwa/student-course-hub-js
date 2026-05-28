@@ -4,7 +4,6 @@
 import { layoutView } from "./layoutView.js";
 
 export function interestFormView(programme, error = "") {
-
   const errorHtml = error
     ? `<p class="error" role="alert">${error}</p>`
     : "";
@@ -82,10 +81,26 @@ export function interestFormView(programme, error = "") {
   `;
 
   return layoutView("Register Interest", content);
-
 }
 
-export function interestSuccessView() {
+export function interestSuccessView(interestId = null) {
+  const withdrawButton = interestId
+    ? `
+      <form
+        method="POST"
+        action="/interests/${interestId}/withdraw"
+        class="withdraw-form"
+      >
+        <button
+          class="button danger-button withdraw-button"
+          type="submit"
+          onclick="return confirm('Are you sure you want to withdraw your interest?')"
+        >
+          Withdraw Interest
+        </button>
+      </form>
+    `
+    : "";
 
   const content = `
     <section class="card">
@@ -96,9 +111,20 @@ export function interestSuccessView() {
         Your interest has been saved successfully.
       </p>
 
-      <a class="button" href="/programmes">
-        Back to Programmes
-      </a>
+      <p class="info-box">
+        You can withdraw this interest if you no longer want to receive
+        updates about this programme.
+      </p>
+
+      <div class="success-actions">
+
+        <a class="button" href="/programmes">
+          Back to Programmes
+        </a>
+
+        ${withdrawButton}
+
+      </div>
 
     </section>
   `;
@@ -107,5 +133,4 @@ export function interestSuccessView() {
     "Interest Registered",
     content,
   );
-
 }
