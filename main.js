@@ -10,6 +10,11 @@ import {
   toggleProgrammePublish,
 } from "./controllers/adminController.js";
 
+import {
+  showAddModulePage,
+  createModuleFromRequest,
+} from "./controllers/moduleController.js";
+
 import { requireAdmin } from "./middleware/authMiddleware.js";
 import { adminDashboardView } from "./views/adminView.js";
 
@@ -247,6 +252,53 @@ if (
   );
 
   return toggleProgrammePublish(id);
+
+}
+
+// Route: Show add module form
+if (
+  url.pathname.startsWith("/admin/programmes/")
+  && url.pathname.endsWith("/modules/new")
+) {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  const programmeId = Number(
+    url.pathname.split("/")[3],
+  );
+
+  return htmlResponse(
+    showAddModulePage(programmeId),
+  );
+
+}
+
+
+// Route: Create module
+if (
+  url.pathname.startsWith("/admin/programmes/")
+  && url.pathname.endsWith("/modules/create")
+  && request.method === "POST"
+) {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  const programmeId = Number(
+    url.pathname.split("/")[3],
+  );
+
+  return await createModuleFromRequest(
+    request,
+    programmeId,
+  );
 
 }
 

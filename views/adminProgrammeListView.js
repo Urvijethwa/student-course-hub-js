@@ -19,6 +19,13 @@ export function adminProgrammeListView(programmes) {
             Edit
           </a>
 
+          <a
+          class="button small-button"
+          href="/admin/programmes/${programme.id}/modules/new"
+          >
+          Add Module
+        </a>
+
           <form
             method="POST"
             action="/admin/programmes/${programme.id}/delete"
