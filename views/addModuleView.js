@@ -14,11 +14,16 @@ export function addModuleView(
 
       <h2>Add Module</h2>
 
+      <p>
+        Add a new module to this programme.
+      </p>
+
       ${errorHtml}
 
       <form
         method="POST"
         action="/admin/programmes/${programmeId}/modules/create"
+        novalidate
       >
 
         <label for="moduleName">
@@ -29,8 +34,13 @@ export function addModuleView(
           type="text"
           id="moduleName"
           name="moduleName"
-          required
+          placeholder="Enter module name"
+          maxlength="100"
         >
+
+        <small>
+          Minimum 3 characters required.
+        </small>
 
         <label for="moduleLeader">
           Module Leader
@@ -40,8 +50,13 @@ export function addModuleView(
           type="text"
           id="moduleLeader"
           name="moduleLeader"
-          required
+          placeholder="Enter module leader name"
+          maxlength="100"
         >
+
+        <small>
+          Minimum 2 characters required.
+        </small>
 
         <label for="year">
           Year
@@ -49,9 +64,25 @@ export function addModuleView(
 
         <select id="year" name="year">
 
-          <option value="1">Year 1</option>
-          <option value="2">Year 2</option>
-          <option value="3">Year 3</option>
+          <option value="">
+            Select year
+          </option>
+
+          <option value="1">
+            Year 1
+          </option>
+
+          <option value="2">
+            Year 2
+          </option>
+
+          <option value="3">
+            Year 3
+          </option>
+
+          <option value="4">
+            Year 4
+          </option>
 
         </select>
 

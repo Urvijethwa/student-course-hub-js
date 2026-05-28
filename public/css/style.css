@@ -245,3 +245,13 @@ button {
   }
 
 }
+
+/* Error message styling */
+.error {
+  background: #ffe3e3;
+  color: #b00020;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}

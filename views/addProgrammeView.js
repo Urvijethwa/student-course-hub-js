@@ -11,22 +11,43 @@ export function addProgrammeView(error = "") {
 
       <h2>Add Programme</h2>
 
+      <p>
+        Create a new university programme.
+      </p>
+
       ${errorHtml}
 
-      <form method="POST" action="/admin/programmes/create">
+      <form
+        method="POST"
+        action="/admin/programmes/create"
+        novalidate
+      >
 
-        <label for="title">Programme Title</label>
+        <label for="title">
+          Programme Title
+        </label>
 
         <input
           type="text"
           id="title"
           name="title"
-          required
+          placeholder="Enter programme title"
+          maxlength="100"
         >
 
-        <label for="level">Level</label>
+        <small>
+          Minimum 3 characters required.
+        </small>
+
+        <label for="level">
+          Level
+        </label>
 
         <select id="level" name="level">
+
+          <option value="">
+            Select programme level
+          </option>
 
           <option value="Undergraduate">
             Undergraduate
@@ -45,8 +66,14 @@ export function addProgrammeView(error = "") {
         <textarea
           id="description"
           name="description"
-          required
+          rows="6"
+          maxlength="1000"
+          placeholder="Enter programme description"
         ></textarea>
+
+        <small>
+          Minimum 20 characters required.
+        </small>
 
         <button class="button" type="submit">
           Create Programme

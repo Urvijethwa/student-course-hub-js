@@ -1,51 +1,59 @@
 import { findUserByUsername } from "../models/userModel.js";
 import { createSession } from "../models/sessionModel.js";
 
-
 import { loginView } from "../views/loginView.js";
+
+function htmlResponse(html, status = 200) {
+  return new Response(html, {
+    status,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+    },
+  });
+}
+
+function validateLogin(username, password) {
+  if (!username || !password) {
+    return "Please complete all fields.";
+  }
+
+  if (username.length < 3) {
+    return "Username must be at least 3 characters.";
+  }
+
+  if (password.length < 6) {
+    return "Password must be at least 6 characters.";
+  }
+
+  return "";
+}
 
 export function showLoginPage() {
   return loginView();
 }
 
 export async function loginUser(request) {
-
-  // Read submitted form data from the POST request.
   const formData = await request.formData();
 
   const username = formData.get("username")?.toString().trim();
   const password = formData.get("password")?.toString().trim();
 
-  // Validate empty fields.
-  if (!username || !password) {
-    return new Response(loginView("Please complete all fields."), {
-      status: 400,
-      headers: {
-        "content-type": "text/html; charset=utf-8",
-      },
-    });
+  const validationError = validateLogin(username, password);
+
+  if (validationError) {
+    return htmlResponse(loginView(validationError), 400);
   }
 
-  // Find the user in the database.
   const user = findUserByUsername(username);
 
-  // Check username and password.
   if (!user || user.password !== password) {
-    return new Response(loginView("Invalid username or password."), {
-      status: 401,
-      headers: {
-        "content-type": "text/html; charset=utf-8",
-      },
-    });
+    return htmlResponse(loginView("Invalid username or password."), 401);
   }
 
-  // Create a random session token.
   const sessionToken = crypto.randomUUID();
 
-  // Save session token in SQLite.
   createSession(sessionToken, user.id);
 
-  // Redirect to admin page and store session token in a cookie.
   return new Response(null, {
     status: 302,
     headers: {

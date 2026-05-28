@@ -1,9 +1,42 @@
 // controllers/interestController.js
-// This controller handles student interest registration.
+// This controller handles student interest registration and withdrawal.
 
 import { getProgrammeById } from "../models/programmeModel.js";
-import { createInterest } from "../models/interestModel.js";
-import { interestFormView, interestSuccessView } from "../views/interestFormView.js";
+
+import {
+  createInterest,
+  deleteInterest,
+} from "../models/interestModel.js";
+
+import {
+  interestFormView,
+  interestSuccessView,
+} from "../views/interestFormView.js";
+
+function htmlResponse(html, status = 200) {
+  return new Response(html, {
+    status,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+    },
+  });
+}
+
+function validateInterest(studentName, email) {
+  if (!studentName || !email) {
+    return "Please complete all fields.";
+  }
+
+  if (studentName.length < 2) {
+    return "Name must be at least 2 characters.";
+  }
+
+  if (!email.includes("@") || !email.includes(".")) {
+    return "Please enter a valid email address.";
+  }
+
+  return "";
+}
 
 export function showInterestForm(programmeId) {
   const programme = getProgrammeById(programmeId);
@@ -16,7 +49,6 @@ export function showInterestForm(programmeId) {
 }
 
 export async function createInterestFromRequest(request) {
-  // Read form data submitted using POST.
   const formData = await request.formData();
 
   const studentName = formData.get("studentName")?.toString().trim();
@@ -26,27 +58,21 @@ export async function createInterestFromRequest(request) {
   const programme = getProgrammeById(programmeId);
 
   if (!programme) {
-    return "<h1>Programme not found</h1>";
+    return htmlResponse("<h1>Programme not found</h1>", 404);
   }
 
-  // Basic server-side validation.
-  if (!studentName || !email) {
-    return interestFormView(programme, "Please complete all fields.");
+  const validationError = validateInterest(studentName, email);
+
+  if (validationError) {
+    return htmlResponse(interestFormView(programme, validationError), 400);
   }
 
-  // Simple email validation.
-  if (!email.includes("@") || !email.includes(".")) {
-    return interestFormView(programme, "Please enter a valid email address.");
-  }
-
-  // Save the interest registration in SQLite.
   createInterest(studentName, email, programmeId);
 
-  return interestSuccessView();
+  return htmlResponse(interestSuccessView());
 }
 
 export function withdrawInterest(id) {
-
   deleteInterest(id);
 
   return new Response(null, {
@@ -55,5 +81,4 @@ export function withdrawInterest(id) {
       "Location": "/programmes",
     },
   });
-
 }
