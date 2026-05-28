@@ -1,7 +1,6 @@
 import { layoutView } from "./layoutView.js";
 
 export function addProgrammeView(error = "") {
-
   const errorHtml = error
     ? `<p class="error">${error}</p>`
     : "";
@@ -15,6 +14,11 @@ export function addProgrammeView(error = "") {
         Create a new university programme.
       </p>
 
+      <p class="info-box">
+        After creating the programme, you can add one or more modules
+        from the Manage Programmes page.
+      </p>
+
       ${errorHtml}
 
       <form
@@ -23,9 +27,7 @@ export function addProgrammeView(error = "") {
         novalidate
       >
 
-        <label for="title">
-          Programme Title
-        </label>
+        <label for="title">Programme Title</label>
 
         <input
           type="text"
@@ -35,33 +37,17 @@ export function addProgrammeView(error = "") {
           maxlength="100"
         >
 
-        <small>
-          Minimum 3 characters required.
-        </small>
+        <small>Minimum 3 characters required.</small>
 
-        <label for="level">
-          Level
-        </label>
+        <label for="level">Level</label>
 
         <select id="level" name="level">
-
-          <option value="">
-            Select programme level
-          </option>
-
-          <option value="Undergraduate">
-            Undergraduate
-          </option>
-
-          <option value="Postgraduate">
-            Postgraduate
-          </option>
-
+          <option value="">Select programme level</option>
+          <option value="Undergraduate">Undergraduate</option>
+          <option value="Postgraduate">Postgraduate</option>
         </select>
 
-        <label for="description">
-          Description
-        </label>
+        <label for="description">Description</label>
 
         <textarea
           id="description"
@@ -71,8 +57,20 @@ export function addProgrammeView(error = "") {
           placeholder="Enter programme description"
         ></textarea>
 
+        <small>Minimum 20 characters required.</small>
+
+        <label for="image">Programme Image URL</label>
+
+        <input
+          type="url"
+          id="image"
+          name="image"
+          placeholder="Paste image URL"
+          maxlength="500"
+        >
+
         <small>
-          Minimum 20 characters required.
+          Optional: paste an image URL to make the programme card more visual.
         </small>
 
         <button class="button" type="submit">
@@ -85,5 +83,4 @@ export function addProgrammeView(error = "") {
   `;
 
   return layoutView("Add Programme", content);
-
 }

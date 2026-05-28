@@ -1,9 +1,7 @@
 import { layoutView } from "./layoutView.js";
 
 export function adminProgrammeListView(programmes) {
-
   const programmeRows = programmes.map((programme) => {
-
     const status =
       programme.published === 1
         ? "Published"
@@ -11,18 +9,11 @@ export function adminProgrammeListView(programmes) {
 
     return `
       <tr>
+        <td>${programme.id}</td>
 
-        <td>
-          ${programme.id}
-        </td>
+        <td>${programme.title}</td>
 
-        <td>
-          ${programme.title}
-        </td>
-
-        <td>
-          ${programme.level}
-        </td>
+        <td>${programme.level}</td>
 
         <td>
           <span class="status-tag">
@@ -31,7 +22,6 @@ export function adminProgrammeListView(programmes) {
         </td>
 
         <td>
-
           <div class="admin-button-group">
 
             <a
@@ -52,7 +42,6 @@ export function adminProgrammeListView(programmes) {
               method="POST"
               action="/admin/programmes/${programme.id}/delete"
             >
-
               <button
                 class="button action-button danger-button"
                 type="submit"
@@ -60,50 +49,36 @@ export function adminProgrammeListView(programmes) {
               >
                 Delete
               </button>
-
             </form>
 
             <form
               method="POST"
               action="/admin/programmes/${programme.id}/toggle-publish"
             >
-
               <button
                 class="button action-button"
                 type="submit"
               >
-                ${programme.published === 1
-                  ? "Unpublish"
-                  : "Publish"}
+                ${programme.published === 1 ? "Unpublish" : "Publish"}
               </button>
-
             </form>
 
           </div>
-
         </td>
-
       </tr>
     `;
-
   }).join("");
 
   const content = `
     <section class="card">
 
       <div class="page-header">
-
         <div>
-
-          <h2>
-            Manage Programmes
-          </h2>
+          <h2>Manage Programmes</h2>
 
           <p>
-            Manage all programmes stored
-            in the database.
+            Manage programmes and add as many modules as needed.
           </p>
-
         </div>
 
         <a
@@ -112,15 +87,16 @@ export function adminProgrammeListView(programmes) {
         >
           Add New Programme
         </a>
-
       </div>
 
+      <p class="info-box">
+        To add multiple modules to a programme, click Add Module again
+        after each module is created.
+      </p>
+
       <div class="table-wrapper">
-
         <table>
-
           <thead>
-
             <tr>
               <th>ID</th>
               <th>Programme</th>
@@ -128,23 +104,16 @@ export function adminProgrammeListView(programmes) {
               <th>Status</th>
               <th>Actions</th>
             </tr>
-
           </thead>
 
           <tbody>
             ${programmeRows}
           </tbody>
-
         </table>
-
       </div>
 
     </section>
   `;
 
-  return layoutView(
-    "Manage Programmes",
-    content,
-  );
-
+  return layoutView("Manage Programmes", content);
 }

@@ -2,11 +2,9 @@ import { layoutView } from "./layoutView.js";
 import { escapeHtml } from "../utils/escapeHtml.js";
 
 export function programmeDetailView(programme, modules) {
-
   const moduleList = modules.map((module) => {
     return `
       <li class="module-item">
-
         <strong>
           Year ${escapeHtml(module.year)}:
         </strong>
@@ -17,10 +15,14 @@ export function programmeDetailView(programme, modules) {
           Module Leader:
           ${escapeHtml(module.leader)}
         </p>
-
       </li>
     `;
   }).join("");
+
+  const noModulesMessage =
+    modules.length === 0
+      ? `<p class="muted-text">No modules have been added yet.</p>`
+      : "";
 
   const content = `
     <section class="card programme-detail-card">
@@ -31,6 +33,16 @@ export function programmeDetailView(programme, modules) {
       >
         ← Back to programmes
       </a>
+
+      ${programme.image
+        ? `
+          <img
+            class="programme-detail-image"
+            src="${escapeHtml(programme.image)}"
+            alt="${escapeHtml(programme.title)}"
+          >
+        `
+        : ""}
 
       <h2>
         ${escapeHtml(programme.title)}
@@ -44,22 +56,22 @@ export function programmeDetailView(programme, modules) {
         ${escapeHtml(programme.description)}
       </p>
 
-      <h3>Modules</h3>
-
-      <ul class="module-list">
-        ${moduleList}
-      </ul>
-
-      <div class="button-group">
-
+      <div class="register-wrapper">
         <a
-          class="button action-button"
+          class="button register-button"
           href="/interests/new?programmeId=${programme.id}"
         >
           Register Interest
         </a>
-
       </div>
+
+      <h3>Modules</h3>
+
+      ${noModulesMessage}
+
+      <ul class="module-list">
+        ${moduleList}
+      </ul>
 
     </section>
   `;
@@ -68,5 +80,4 @@ export function programmeDetailView(programme, modules) {
     programme.title,
     content,
   );
-
 }

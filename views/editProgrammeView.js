@@ -69,6 +69,19 @@ export function editProgrammeView(
           required
         >${programme.description}</textarea>
 
+        <label for="image">
+          Programme Image URL
+        </label>
+
+        <input
+          type="url"
+          id="image"
+          name="image"
+          value="${programme.image || ""}"
+          placeholder="Paste image URL"
+          maxlength="500"
+        >
+
         <button class="button" type="submit">
           Update Programme
         </button>

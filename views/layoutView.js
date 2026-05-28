@@ -9,12 +9,10 @@ export function layoutView(title, content) {
     <head>
       <meta charset="UTF-8">
 
-      <!-- Responsive mobile layout -->
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
       <title>${title} | Student Course Hub</title>
 
-      <!-- Main stylesheet -->
       <link rel="stylesheet" href="/css/style.css">
     </head>
 
@@ -40,6 +38,16 @@ export function layoutView(title, content) {
       <main id="main-content">
         ${content}
       </main>
+
+      <footer class="site-footer">
+        <p>
+          Student Course Hub | Advanced Web Development Project
+        </p>
+
+        <p>
+          Built with Deno, JavaScript, HTML, CSS and SQLite.
+        </p>
+      </footer>
     </body>
 
     </html>

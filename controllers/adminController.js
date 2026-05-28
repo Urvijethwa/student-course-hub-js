@@ -52,6 +52,7 @@ export async function createProgrammeFromRequest(request) {
   const title = formData.get("title")?.toString().trim();
   const level = formData.get("level")?.toString().trim();
   const description = formData.get("description")?.toString().trim();
+  const image = formData.get("image")?.toString().trim() || "";
 
   const validationError = validateProgramme(title, level, description);
 
@@ -59,7 +60,7 @@ export async function createProgrammeFromRequest(request) {
     return htmlResponse(addProgrammeView(validationError), 400);
   }
 
-  createProgramme(title, level, description);
+  createProgramme(title, level, description, image);
 
   return new Response(null, {
     status: 302,
@@ -91,6 +92,7 @@ export async function updateProgrammeFromRequest(request, id) {
   const title = formData.get("title")?.toString().trim();
   const level = formData.get("level")?.toString().trim();
   const description = formData.get("description")?.toString().trim();
+  const image = formData.get("image")?.toString().trim() || "";
 
   const validationError = validateProgramme(title, level, description);
 
@@ -102,6 +104,7 @@ export async function updateProgrammeFromRequest(request, id) {
           title,
           level,
           description,
+          image,
         },
         validationError,
       ),
@@ -109,7 +112,7 @@ export async function updateProgrammeFromRequest(request, id) {
     );
   }
 
-  updateProgramme(id, title, level, description);
+  updateProgramme(id, title, level, description, image);
 
   return new Response(null, {
     status: 302,

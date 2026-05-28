@@ -1,12 +1,8 @@
-// models/programmeModel.js
-// This model handles programme database queries.
-// Models contain database logic only.
-
 import { db } from "../db/database.js";
 
 export function getPublishedProgrammes() {
   const rows = db.query(
-    "SELECT id, title, level, description FROM programmes WHERE published = ?",
+    "SELECT id, title, level, description, image FROM programmes WHERE published = ?",
     [1],
   );
 
@@ -15,32 +11,30 @@ export function getPublishedProgrammes() {
     title: row[1],
     level: row[2],
     description: row[3],
+    image: row[4],
   }));
 }
 
 export function getProgrammeById(id) {
-  // Parameterised query helps protect against SQL injection.
   const rows = db.query(
-    "SELECT id, title, level, description FROM programmes WHERE id = ? AND published = ?",
+    "SELECT id, title, level, description, image FROM programmes WHERE id = ? AND published = ?",
     [id, 1],
   );
 
   const programme = [...rows][0];
 
-  if (!programme) {
-    return null;
-  }
+  if (!programme) return null;
 
   return {
     id: programme[0],
     title: programme[1],
     level: programme[2],
     description: programme[3],
+    image: programme[4],
   };
 }
 
 export function getModulesByProgrammeId(programmeId) {
-  // Gets modules linked to a specific programme.
   const rows = db.query(
     "SELECT id, title, year, leader FROM modules WHERE programme_id = ? ORDER BY year ASC",
     [programmeId],
@@ -54,105 +48,60 @@ export function getModulesByProgrammeId(programmeId) {
   }));
 }
 
-export function createProgramme(title, level, description) {
-
+export function createProgramme(title, level, description, image) {
   db.query(
     `
     INSERT INTO programmes (
       title,
       level,
       description,
+      image,
       published
     )
-    VALUES (?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?)
     `,
-    [
-      title,
-      level,
-      description,
-      1,
-    ],
+    [title, level, description, image, 1],
   );
-
 }
 
 export function getAllProgrammes() {
   const rows = db.query(`
-    SELECT
-      id,
-      title,
-      level,
-      description,
-      published
+    SELECT id, title, level, description, image, published
     FROM programmes
     ORDER BY id DESC
   `);
 
-  return [...rows].map((row) => {
-    return {
-      id: row[0],
-      title: row[1],
-      level: row[2],
-      description: row[3],
-      published: row[4],
-    };
-  });
+  return [...rows].map((row) => ({
+    id: row[0],
+    title: row[1],
+    level: row[2],
+    description: row[3],
+    image: row[4],
+    published: row[5],
+  }));
 }
 
-export function updateProgramme(
-  id,
-  title,
-  level,
-  description,
-) {
-
+export function updateProgramme(id, title, level, description, image) {
   db.query(
     `
     UPDATE programmes
-    SET
-      title = ?,
-      level = ?,
-      description = ?
+    SET title = ?,
+        level = ?,
+        description = ?,
+        image = ?
     WHERE id = ?
     `,
-    [
-      title,
-      level,
-      description,
-      id,
-    ],
+    [title, level, description, image, id],
   );
-
 }
 
 export function deleteProgramme(id) {
-  db.query(
-    `
-    DELETE FROM modules
-    WHERE programme_id = ?
-    `,
-    [id],
-  );
-
-  db.query(
-    `
-    DELETE FROM interests
-    WHERE programme_id = ?
-    `,
-    [id],
-  );
-
-  db.query(
-    `
-    DELETE FROM programmes
-    WHERE id = ?
-    `,
-    [id],
-  );
+  db.query("DELETE FROM modules WHERE programme_id = ?", [id]);
+  db.query("DELETE FROM interests WHERE programme_id = ?", [id]);
+  db.query("DELETE FROM programmes WHERE id = ?", [id]);
 }
 
 export function toggleProgrammePublishStatus(id) {
-
   db.query(
     `
     UPDATE programmes
@@ -165,12 +114,11 @@ export function toggleProgrammePublishStatus(id) {
     `,
     [id],
   );
-
 }
 
 export function searchPublishedProgrammes(searchTerm, level) {
   let sql = `
-    SELECT id, title, level, description
+    SELECT id, title, level, description, image
     FROM programmes
     WHERE published = ?
   `;
@@ -190,25 +138,19 @@ export function searchPublishedProgrammes(searchTerm, level) {
   }
 
   if (level) {
-    sql += `
-      AND level = ?
-    `;
-
+    sql += ` AND level = ? `;
     params.push(level);
   }
 
-  sql += `
-    ORDER BY title ASC
-  `;
+  sql += ` ORDER BY title ASC `;
 
   const rows = db.query(sql, params);
 
-  return [...rows].map((row) => {
-    return {
-      id: row[0],
-      title: row[1],
-      level: row[2],
-      description: row[3],
-    };
-  });
+  return [...rows].map((row) => ({
+    id: row[0],
+    title: row[1],
+    level: row[2],
+    description: row[3],
+    image: row[4],
+  }));
 }

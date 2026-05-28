@@ -7,17 +7,34 @@ export function programmesView(
   selectedLevel = "",
 ) {
   const programmeCards = programmes.map((programme) => {
+    const imageHtml = programme.image
+      ? `
+        <img
+          class="programme-image"
+          src="${escapeHtml(programme.image)}"
+          alt="${escapeHtml(programme.title)}"
+        >
+      `
+      : "";
+
     return `
       <article class="card programme-card">
+
+        ${imageHtml}
+
         <h3>${escapeHtml(programme.title)}</h3>
 
         <p class="tag">${escapeHtml(programme.level)}</p>
 
         <p>${escapeHtml(programme.description)}</p>
 
-        <a class="button card-button" href="/programmes/${programme.id}">
+        <a
+          class="button card-button"
+          href="/programmes/${programme.id}"
+        >
           View Details
         </a>
+
       </article>
     `;
   }).join("");
@@ -29,15 +46,21 @@ export function programmesView(
 
   const content = `
     <section>
+
       <h2>Available Programmes</h2>
 
       <p>
         Browse undergraduate and postgraduate programmes.
       </p>
 
-      <form method="GET" action="/programmes" class="search-form">
+      <form
+        method="GET"
+        action="/programmes"
+        class="search-form"
+      >
 
         <div class="form-group">
+
           <label for="search">
             Search programmes
           </label>
@@ -49,9 +72,11 @@ export function programmesView(
             value="${escapeHtml(searchTerm)}"
             placeholder="Search by keyword"
           >
+
         </div>
 
         <div class="form-group">
+
           <label for="level">
             Filter by level
           </label>
@@ -77,9 +102,13 @@ export function programmesView(
             </option>
 
           </select>
+
         </div>
 
-        <button class="button search-button" type="submit">
+        <button
+          class="button search-button"
+          type="submit"
+        >
           Search
         </button>
 
@@ -87,29 +116,15 @@ export function programmesView(
 
       ${noResultsMessage}
 
-      <section class="live-search-section">
-        <label for="live-search">
-          Live Search
-        </label>
-
-        <input
-          type="text"
-          id="live-search"
-          placeholder="Type to search programmes..."
-        >
-      </section>
-
-      <div
-        class="grid"
-        id="programme-results"
-        aria-live="polite"
-      >
+      <div class="grid">
         ${programmeCards}
       </div>
 
-      <script src="/js/programmeSearch.js"></script>
     </section>
   `;
 
-  return layoutView("Programmes", content);
+  return layoutView(
+    "Programmes",
+    content,
+  );
 }
