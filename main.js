@@ -23,6 +23,7 @@ import { adminDashboardView } from "./views/adminView.js";
 import {
   showInterestForm,
   createInterestFromRequest,
+  withdrawInterest,
 } from "./controllers/interestController.js";
 
 import {
@@ -348,6 +349,21 @@ if (url.pathname === "/admin/interests/export") {
 // Route: JSON API for Fetch API live search
 if (url.pathname === "/api/programmes") {
   return getProgrammesJson(url);
+}
+
+// Route: Withdraw student interest
+if (
+  url.pathname.startsWith("/interests/")
+  && url.pathname.endsWith("/withdraw")
+  && request.method === "POST"
+) {
+
+  const interestId = Number(
+    url.pathname.split("/")[2],
+  );
+
+  return withdrawInterest(interestId);
+
 }
 
   // Route: 404 page

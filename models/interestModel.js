@@ -38,3 +38,15 @@ export function getAllInterestsWithProgrammes() {
   });
 }
 
+export function deleteInterest(id) {
+
+  db.query(
+    `
+    DELETE FROM interests
+    WHERE id = ?
+    `,
+    [id],
+  );
+
+}
+

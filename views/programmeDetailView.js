@@ -2,14 +2,14 @@
 // This view displays one programme and its related modules.
 
 import { layoutView } from "./layoutView.js";
+import { escapeHtml } from "../utils/escapeHtml.js";
 
 export function programmeDetailView(programme, modules) {
   const moduleList = modules.map((module) => {
     return `
       <li class="module-item">
-        <strong>Year ${module.year}:</strong> ${module.title}
-        <br>
-        <span>Module leader: ${module.leader}</span>
+      <strong>Year ${escapeHtml(module.year)}:</strong> ${escapeHtml(module.title)}
+      <span>Module leader: ${escapeHtml(module.leader)}</span>
       </li>
     `;
   }).join("");
@@ -18,9 +18,9 @@ export function programmeDetailView(programme, modules) {
     <section class="card">
       <a href="/programmes">← Back to programmes</a>
 
-      <h2>${programme.title}</h2>
-      <p class="tag">${programme.level}</p>
-      <p>${programme.description}</p>
+      <h2>${escapeHtml(programme.title)}</h2>
+      <p class="tag">${escapeHtml(programme.level)}</p>
+      <p>${escapeHtml(programme.description)}</p>
 
       <h3>Modules</h3>
       <ul class="module-list">
@@ -30,6 +30,20 @@ export function programmeDetailView(programme, modules) {
       <a class="button" href="/interests/new?programmeId=${programme.id}">
         Register Interest
       </a>
+
+      <form
+      method="POST"
+      action="/interests/${programme.id}/withdraw"
+    >
+
+      <button
+        class="button danger-button"
+        type="submit"
+      >
+        Withdraw Interest
+      </button>
+
+    </form>
     </section>
   `;
 

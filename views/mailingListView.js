@@ -1,13 +1,14 @@
 import { layoutView } from "./layoutView.js";
+import { escapeHtml } from "../utils/escapeHtml.js";
 
 export function mailingListView(interests) {
   const interestRows = interests.map((interest) => {
     return `
       <tr>
-        <td>${interest.studentName}</td>
-        <td>${interest.email}</td>
-        <td>${interest.programmeTitle}</td>
-        <td>${interest.createdAt}</td>
+        <td>${escapeHtml(interest.studentName)}</td>
+        <td>${escapeHtml(interest.email)}</td>
+        <td>${escapeHtml(interest.programmeTitle)}</td>
+        <td>${escapeHtml(interest.createdAt)}</td>
       </tr>
     `;
   }).join("");

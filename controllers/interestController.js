@@ -44,3 +44,16 @@ export async function createInterestFromRequest(request) {
 
   return interestSuccessView();
 }
+
+export function withdrawInterest(id) {
+
+  deleteInterest(id);
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      "Location": "/programmes",
+    },
+  });
+
+}

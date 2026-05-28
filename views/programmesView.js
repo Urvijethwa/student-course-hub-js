@@ -1,3 +1,4 @@
+import { escapeHtml } from "../utils/escapeHtml.js";
 import { layoutView } from "./layoutView.js";
 
 export function programmesView(
@@ -8,11 +9,9 @@ export function programmesView(
   const programmeCards = programmes.map((programme) => {
     return `
       <article class="card programme-card">
-        <h3>${programme.title}</h3>
-
-        <p class="tag">${programme.level}</p>
-
-        <p>${programme.description}</p>
+        <h3>${escapeHtml(programme.title)}</h3>
+        <p class="tag">${escapeHtml(programme.level)}</p>
+        <p>${escapeHtml(programme.description)}</p>
 
         <a class="button" href="/programmes/${programme.id}">
           View Details
@@ -44,7 +43,7 @@ export function programmesView(
           type="text"
           id="search"
           name="search"
-          value="${searchTerm}"
+          value="${escapeHtml(searchTerm)}"
           placeholder="Search by keyword"
         >
 
