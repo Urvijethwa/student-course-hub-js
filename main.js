@@ -7,6 +7,7 @@ import {
   showEditProgrammePage,
   updateProgrammeFromRequest,
   deleteProgrammeFromRequest,
+  toggleProgrammePublish,
 } from "./controllers/adminController.js";
 
 import { requireAdmin } from "./middleware/authMiddleware.js";
@@ -225,6 +226,27 @@ if (
   );
 
   return deleteProgrammeFromRequest(id);
+
+}
+
+// Route: Publish/unpublish programme
+if (
+  url.pathname.startsWith("/admin/programmes/")
+  && url.pathname.endsWith("/toggle-publish")
+  && request.method === "POST"
+) {
+
+  const auth = requireAdmin(request);
+
+  if (!auth.authorised) {
+    return auth.redirectResponse;
+  }
+
+  const id = Number(
+    url.pathname.split("/")[3],
+  );
+
+  return toggleProgrammePublish(id);
 
 }
 

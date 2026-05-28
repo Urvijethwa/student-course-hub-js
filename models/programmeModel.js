@@ -126,10 +126,41 @@ export function updateProgramme(
 }
 
 export function deleteProgramme(id) {
+  db.query(
+    `
+    DELETE FROM modules
+    WHERE programme_id = ?
+    `,
+    [id],
+  );
+
+  db.query(
+    `
+    DELETE FROM interests
+    WHERE programme_id = ?
+    `,
+    [id],
+  );
 
   db.query(
     `
     DELETE FROM programmes
+    WHERE id = ?
+    `,
+    [id],
+  );
+}
+
+export function toggleProgrammePublishStatus(id) {
+
+  db.query(
+    `
+    UPDATE programmes
+    SET published =
+      CASE
+        WHEN published = 1 THEN 0
+        ELSE 1
+      END
     WHERE id = ?
     `,
     [id],

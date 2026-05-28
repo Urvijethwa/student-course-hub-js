@@ -7,6 +7,7 @@ import {
   getProgrammeById,
   updateProgramme,
   deleteProgramme,
+  toggleProgrammePublishStatus,
 } from "../models/programmeModel.js";
 
 import { addProgrammeView } from "../views/addProgrammeView.js";
@@ -103,6 +104,19 @@ export async function updateProgrammeFromRequest(
 export function deleteProgrammeFromRequest(id) {
 
   deleteProgramme(id);
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      "Location": "/admin/programmes",
+    },
+  });
+
+}
+
+export function toggleProgrammePublish(id) {
+
+  toggleProgrammePublishStatus(id);
 
   return new Response(null, {
     status: 302,
