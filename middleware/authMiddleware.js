@@ -20,6 +20,7 @@ function getCookie(request, cookieName) {
   return null;
 }
 
+//permission
 export function requireAdmin(request) {
   const sessionToken = getCookie(request, "session");
 

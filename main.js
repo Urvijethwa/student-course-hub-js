@@ -133,6 +133,7 @@ async function handler(request) {
     return logoutUser();
   }
 
+  //checks authentication
   if (url.pathname === "/admin") {
     const auth = requireAdmin(request);
 

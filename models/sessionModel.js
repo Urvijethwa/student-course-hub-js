@@ -1,5 +1,6 @@
 import { db } from "../db/database.js";
 
+//session creation
 export function createSession(sessionToken, userId) {
 
   db.query(
