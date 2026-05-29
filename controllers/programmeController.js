@@ -29,16 +29,17 @@ export function showProgrammeDetails(programmeId) {
   return programmeDetailView(programme, modules);
 }
 
-//Search data from URL
+//Search data from URL - 
 export function searchProgrammesPage(url) {
   const searchTerm = url.searchParams.get("search")?.trim() || "";
   const level = url.searchParams.get("level")?.trim() || "";
-
+//retrives data
   const programmes = searchPublishedProgrammes(searchTerm, level);
 
   return programmesView(programmes, searchTerm, level);
 }
 
+//JSON API
 export function getProgrammesJson(url) {
 
   const searchTerm =

@@ -123,6 +123,7 @@ export function programmesView(
     </section>
   `;
 //send the final HTML page layout back to the browser
+//server-side rendering
   return layoutView(
     "Programmes",
     content,
