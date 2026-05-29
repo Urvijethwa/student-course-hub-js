@@ -1,5 +1,6 @@
 import { db } from "../db/database.js";
 
+//Communicates with SQLite database
 export function getPublishedProgrammes() {
   const rows = db.query(
     "SELECT id, title, level, description, image FROM programmes WHERE published = ?",

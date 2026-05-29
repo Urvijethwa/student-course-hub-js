@@ -95,6 +95,7 @@ async function handler(request) {
     );
   }
 
+  //Routing - form submission
   if (
     url.pathname === "/interests/create"
     && request.method === "POST"

@@ -3,6 +3,7 @@
 
 import { db } from "../db/database.js";
 
+//SQL injection protection
 export function createInterest(studentName, email, programmeId) {
   // Parameterised query prevents SQL injection.
   db.query(

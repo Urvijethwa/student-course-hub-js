@@ -29,6 +29,7 @@ export function showProgrammeDetails(programmeId) {
   return programmeDetailView(programme, modules);
 }
 
+//Search data from URL
 export function searchProgrammesPage(url) {
   const searchTerm = url.searchParams.get("search")?.trim() || "";
   const level = url.searchParams.get("level")?.trim() || "";

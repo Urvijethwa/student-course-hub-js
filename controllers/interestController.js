@@ -22,6 +22,7 @@ function htmlResponse(html, status = 200) {
   });
 }
 
+//validation
 function validateInterest(studentName, email) {
   if (!studentName || !email) {
     return "Please complete all fields.";
@@ -60,7 +61,8 @@ export async function createInterestFromRequest(request) {
   if (!programme) {
     return htmlResponse("<h1>Programme not found</h1>", 404);
   }
-
+  
+  //Request Flow
   const validationError = validateInterest(studentName, email);
 
   if (validationError) {
